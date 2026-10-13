@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House of J&S Computer - Assessment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --secondary-gold: #F9E076;
+            --dark-gold: #B8860B;
+            --bg-color: #FCFCFC;
+            --text-color: #2C3E50;
+            --light-gray: #F5F5F5;
+            --correct-green: #28a745;
+            --wrong-red: #dc3545;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding-bottom: 50px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #ffffff 0%, #fffbf0 100%);
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 3px solid var(--primary-gold);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            max-width: 180px;
+            height: auto;
+            margin-bottom: 15px;
+            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1));
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--dark-gold);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            font-weight: 300;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .question-card {
+            background: #fff;
+            border: 1px solid #E8E8E8;
+            border-left: 5px solid var(--primary-gold);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.1);
+        }
+
+        .question-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: var(--primary-gold);
+            color: #fff;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-left: 38px;
+        }
+
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .options label:hover {
+            background: var(--light-gray);
+        }
+
+        .options input[type="radio"], 
+        .options input[type="checkbox"] {
+            accent-color: var(--primary-gold);
+            width: 18px;
+            height: 18px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px 15px;
+            margin-top: 10px;
+            margin-left: 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+        }
+
+        .fill-blank-input {
+            display: inline-block;
+            width: auto;
+            min-width: 200px;
+            margin-top: 0;
+            padding: 8px 12px;
+        }
+
+        .submit-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--primary-gold) 0%, var(--dark-gold) 100%);
+            color: #fff;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* Results Section */
+        #results-section {
+            display: none;
+            margin-top: 50px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .score-board {
+            background: #fff;
+            border: 2px solid var(--primary-gold);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
+        }
+
+        .score-board h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--dark-gold);
+        }
+
+        .score-text {
+            font-size: 1.2rem;
+            color: #555;
+        }
+
+        .result-item {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #ccc;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .result-item.correct {
+            border-left-color: var(--correct-green);
+            background: #f0fff4;
+        }
+
+        .result-item.wrong {
+            border-left-color: var(--wrong-red);
+            background: #fff5f5;
+        }
+
+        .result-question {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .result-answer {
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        .user-answer {
+            color: var(--wrong-red);
+            text-decoration: line-through;
+        }
+
+        .correct-answer {
+            color: var(--correct-green);
+            font-weight: 600;
+        }
+
+        .explanation {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #ddd;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6rem; }
+            .question-card { padding: 15px; }
+            .options { margin-left: 0; }
+            button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="logo1.png" alt="House of J&S Computer Logo" class="logo">
+        <h1>House of J&S Computer</h1>
+        <p class="subtitle">Year 3 English & General Knowledge Assessment</p>
+    </header>
+
+    <div class="container">
+        <form id="quiz-form">
+            <!-- Questions will be dynamically inserted here by JavaScript -->
+            <div id="quiz-container"></div>
+            
+            <div class="submit-container">
+                <button type="submit" id="submit-btn">Submit Assessment</button>
+            </div>
+        </form>
+
+        <section id="results-section">
+            <div class="score-board">
+                <h2 id="score-display">0 / 0</h2>
+                <p class="score-text" id="score-percentage">0%</p>
+            </div>
+            <div id="detailed-results"></div>
+            <div class="submit-container" style="margin-top: 20px;">
+                <button onclick="location.reload()" style="background: #555; box-shadow: none;">Try Again</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // ==========================================
+        // DATA: All Exam Questions extracted from images
+        // ==========================================
+        const quizData = [
+            // --- Section 1: Y3_U3_16L10 Assessment (Image 1) ---
+            {
+                id: 1,
+                type: 'mcq',
+                question: 'Talking to a trusted adult if you see something that makes you upset is an example of:',
+                options: ['Staying safe', 'Being responsible', 'Being respectful'],
+                correctAnswer: 'Staying safe',
+                explanation: 'Talking to a trusted adult helps ensure your safety.'
+            },
+            {
+                id: 2,
+                type: 'mcq',
+                question: 'Not sharing personal information is an example of:',
+                options: ['Staying safe', 'Being responsible', 'Being respectful'],
+                correctAnswer: 'Being responsible',
+                explanation: 'Protecting personal information is a responsible action.'
+            },
+            {
+                id: 3,
+                type: 'mcq',
+                question: 'Thinking before you post anything is an example of:',
+                options: ['Staying safe', 'Being responsible', 'Being respectful'],
+                correctAnswer: 'Being responsible',
+                explanation: 'Thinking before posting shows responsibility for your digital footprint.'
+            },
+            {
+                id: 4,
+                type: 'mcq',
+                question: 'Being kind and not being rude is an example of:',
+                options: ['Staying safe', 'Being responsible', 'Being respectful'],
+                correctAnswer: 'Being respectful',
+                explanation: 'Kindness and politeness are key aspects of being respectful.'
+            },
+            // Device Good/Bad (Image 1)
+            {
+                id: 5,
+                type: 'text',
+                question: 'Tablet: Good - "characters can be drawn on screen". What is the Bad point?',
+                correctAnswer: 'difficult text editing',
+                explanation: 'Tablets are great for drawing but can be difficult for typing/editing text.'
+            },
+            {
+                id: 6,
+                type: 'text',
+                question: 'Smartphone: Good - "include a digital camera". What is the Bad point?',
+                correctAnswer: 'small screen',
+                explanation: 'Smartphones have cameras but their screens are small for detailed work.'
+            },
+            {
+                id: 7,
+                type: 'text',
+                question: 'Desktop computer: Good - "large screen". What is the Bad point?',
+                correctAnswer: 'may need separate digital camera',
+                explanation: 'Desktops have large screens but often require an external camera.'
+            },
+
+            // --- Section 2: Scenario, Feedback (Image 2) ---
+            {
+                id: 8,
+                type: 'mcq',
+                question: 'You click on a link that leads to a website showing fake news or hate speech. This is an example of inappropriate:',
+                options: ['Contact', 'Content', 'Conduct'],
+                correctAnswer: 'Content',
+                explanation: 'Fake news and hate speech are related to the content you consume.'
+            },
+            {
+                id: 9,
+                type: 'mcq',
+                question: 'An online gamer asks you to send them personal details like your home address and school name. This is an example of inappropriate:',
+                options: ['Contact', 'Content', 'Conduct'],
+                correctAnswer: 'Contact',
+                explanation: 'Strangers asking for personal details is an inappropriate contact issue.'
+            },
+            {
+                id: 10,
+                type: 'mcq',
+                question: 'You share a friend\'s embarrassing photo in a public group chat without their permission. This is an example of inappropriate:',
+                options: ['Contact', 'Content', 'Conduct'],
+                correctAnswer: 'Conduct',
+                explanation: 'Sharing photos without permission is inappropriate online conduct/behavior.'
+            },
+            {
+                id: 11,
+                type: 'text',
+                question: 'Write three types of feedback (1. Describing only things they like, 2. Describing only things they don\'t like, 3. Providing both positive and negative comments):',
+                correctAnswer: 'Positive, Negative, Constructive',
+                explanation: 'The three types are Positive, Negative, and Constructive feedback.'
+            },
+            // True/False Feedback (Image 2)
+            {
+                id: 12,
+                type: 'mcq',
+                question: 'Statement: "The text is a bit small to read; making it larger would improve readability." This is an example of:',
+                options: ['Positive', 'Negative', 'Constructive'],
+                correctAnswer: 'Constructive',
+                explanation: 'It points out a flaw and suggests a specific improvement.'
+            },
+            {
+                id: 13,
+                type: 'mcq',
+                question: 'Statement: "Your comic book is amazing." This is an example of:',
+                options: ['Positive', 'Negative', 'Constructive'],
+                correctAnswer: 'Positive',
+                explanation: 'It offers praise without criticism.'
+            },
+            {
+                id: 14,
+                type: 'mcq',
+                question: 'Statement: "This is terrible and I don\'t like it at all." This is an example of:',
+                options: ['Positive', 'Negative', 'Constructive'],
+                correctAnswer: 'Negative',
+                explanation: 'It is purely negative without constructive advice.'
+            },
+
+            // --- Section 3: Time Expressions (Image 3) ---
+            {
+                id: 15,
+                type: 'text',
+                question: 'Categorize: "Once a week, Last night, Currently, Often, Next year" into Present Simple, Present Continuous, or Simple Past. (Hint: Write them in correct columns). For this quiz, which category does "Once a week" belong to?',
+                correctAnswer: 'Simple Present Tense',
+                explanation: '"Once a week" describes a routine, so it is Simple Present.'
+            },
+            {
+                id: 16,
+                type: 'text',
+                question: 'Which category does "Last night" belong to?',
+                correctAnswer: 'Simple Past Tense',
+                explanation: '"Last night" refers to a completed action in the past.'
+            },
+            {
+                id: 17,
+                type: 'text',
+                question: 'Which category does "Currently" belong to?',
+                correctAnswer: 'Present Continuous Tense',
+                explanation: '"Currently" indicates an action happening right now.'
+            },
+
+            // --- Section 4: Pre-Test (Image 4) ---
+            {
+                id: 18,
+                type: 'mcq',
+                question: 'True or False: Different people have different opinions.',
+                options: ['True', 'False'],
+                correctAnswer: 'True',
+                explanation: 'It is a fact that people have different opinions.'
+            },
+            {
+                id: 19,
+                type: 'mcq',
+                question: 'True or False: No opinions are important to a topic.',
+                options: ['True', 'False'],
+                correctAnswer: 'False',
+                explanation: 'Opinions are important perspectives on a topic.'
+            },
+            {
+                id: 20,
+                type: 'text',
+                question: 'Write Responsible or Irresponsible: "Buying too much food that you will not eat."',
+                correctAnswer: 'Irresponsible',
+                explanation: 'This leads to food waste.'
+            },
+            {
+                id: 21,
+                type: 'text',
+                question: 'Write Responsible or Irresponsible: "Turning off the lights when you leave a room."',
+                correctAnswer: 'Responsible',
+                explanation: 'Saving energy is a responsible action.'
+            },
+            {
+                id: 22,
+                type: 'mcq',
+                question: 'Which of the following are long-term negative results of people being irresponsible consumers?',
+                options: ['Recycling', 'Pollution', 'Deforestation', 'Unemployment', 'Landfill'],
+                correctAnswer: 'Pollution', // The answer marked in red seems to circle Pollution and Deforestation
+                explanation: 'Pollution and Deforestation are long-term negative results.'
+            },
+            {
+                id: 23,
+                type: 'mcq',
+                question: 'Which words have meanings similar to \'consequence\'?',
+                options: ['Effect', 'Behaviour', 'Result', 'Cause', 'Damage'],
+                correctAnswer: 'Result', // The teacher circled "Result" in red
+                explanation: 'A consequence is a result or effect of an action.'
+            },
+            {
+                id: 24,
+                type: 'mcq',
+                question: 'What things do all countries have?',
+                options: ['A king or queen', 'A flag', 'A currency', 'A beach'],
+                correctAnswer: 'A flag', // The teacher circled "A flag" in red
+                explanation: 'Every country has a flag representing it.'
+            },
+
+            // --- Section 5: More Pre-Test (Image 5) ---
+            {
+                id: 25,
+                type: 'mcq',
+                question: 'What can you do if you see prejudice happening in your class?',
+                options: ['Explain to the person showing prejudice that what they are saying is not true.', 'Tell your friend that is just a joke.', 'Tell an adult that someone is being unkind to your friend.', 'Decide not to get involved.', 'Make sure you stick up for your friend.'],
+                correctAnswer: 'Explain to the person showing prejudice that what they are saying is not true.', // Teacher circled A and D/E based on red marks
+                explanation: 'Standing up against prejudice is important, either by explaining or sticking up for the friend.'
+            },
+            {
+                id: 26,
+                type: 'mcq',
+                question: 'Circle three benefits of recycling, reusing, repairing, remodelling and refusing:',
+                options: ['Saving money', 'Creating more waste', 'Reducing waste', 'Saving raw materials', 'Buying more things', 'Protecting resources'],
+                correctAnswer: 'Saving money', // The teacher circled the first option
+                explanation: 'Saving money is a direct benefit of these practices.'
+            },
+            // Fact vs Opinion (Image 5)
+            {
+                id: 27,
+                type: 'mcq',
+                question: '"I like your blue dress," said Jo. Is this Fact or Opinion?',
+                options: ['Fact', 'Opinion'],
+                correctAnswer: 'Opinion',
+                explanation: 'It expresses a personal preference.'
+            },
+            {
+                id: 28,
+                type: 'mcq',
+                question: '"A cat has whiskers." Is this Fact or Opinion?',
+                options: ['Fact', 'Opinion'],
+                correctAnswer: 'Fact',
+                explanation: 'It is a verifiable biological fact.'
+            },
+            {
+                id: 29,
+                type: 'mcq',
+                question: '"I think summer is the best season." Is this Fact or Opinion?',
+                options: ['Fact', 'Opinion'],
+                correctAnswer: 'Opinion',
+                explanation: 'It is a personal belief.'
+            },
+            // 6 Rs (Image 5)
+            {
+                id: 30,
+                type: 'text',
+                question: 'Name any three of the six "Rs" of sustainability.',
+                correctAnswer: 'Reduce, Reuse, Recycle',
+                explanation: 'The 6 Rs are Reduce, Reuse, Recycle, Repair, Refuse, and Remodel/Rethink.'
+            },
+            {
+                id: 31,
+                type: 'mcq',
+                question: 'Which three things can help people resolve conflicts?',
+                options: ['Listening', 'Selfish', 'Shouting', 'Honesty', 'Aggression', 'Kindness'],
+                correctAnswer: 'Listening',
+                explanation: 'Listening, Honesty, and Kindness help resolve conflicts.'
+            },
+
+            // --- Section 6 & 7: Grammar & Punctuation (Images 6 & 7) ---
+            {
+                id: 32,
+                type: 'text',
+                question: 'Rewrite with correct commas: "I enjoy reading swimming and playing with my friend."',
+                correctAnswer: 'I enjoy reading, swimming, and playing with my friend.',
+                explanation: 'Use commas to separate items in a list.'
+            },
+            {
+                id: 33,
+                type: 'text',
+                question: 'Rewrite with correct commas: "Tom is wearing a gray short a white shirt and a blue tie."',
+                correctAnswer: 'Tom is wearing a gray short, a white shirt, and a blue tie.',
+                explanation: 'Separate the clothing items with commas.'
+            },
+            {
+                id: 34,
+                type: 'text',
+                question: 'Rewrite with correct commas: "I got a book pencil and an eraser."',
+                correctAnswer: 'I got a book, a pencil, and an eraser.',
+                explanation: 'Separate the objects with commas.'
+            },
+            {
+                id: 35,
+                type: 'text',
+                question: 'Rewrite with correct commas: "Would you like to go to the mall zoo or beach?"',
+                correctAnswer: 'Would you like to go to the mall, zoo, or beach?',
+                explanation: 'Use commas for options in a question.'
+            },
+            {
+                id: 36,
+                type: 'text',
+                question: 'Rewrite with correct commas: "My cat can run jump and hop."',
+                correctAnswer: 'My cat can run, jump, and hop.',
+                explanation: 'Separate the verbs with commas.'
+            },
+            {
+                id: 37,
+                type: 'text',
+                question: 'Rewrite with correct commas: "I like to eat bananas apples and oranges."',
+                correctAnswer: 'I like to eat bananas, apples, and oranges.',
+                explanation: 'Separate the fruits with commas.'
+            },
+
+            // --- Section 8: Tenses (Image 8) ---
+            {
+                id: 38,
+                type: 'text',
+                question: 'Complete with correct tense: "She often _____ (help) her mum."',
+                correctAnswer: 'helps',
+                explanation: '"Often" indicates a routine, so use Present Simple. She helps.'
+            },
+            {
+                id: 39,
+                type: 'text',
+                question: 'Complete with correct tense: "I _____ (wash) my face and hands now."',
+                correctAnswer: 'am washing',
+                explanation: '"Now" indicates Present Continuous. I am washing.'
+            },
+            {
+                id: 40,
+                type: 'text',
+                question: 'Complete with correct tense: "I usually _____ (go) to school at 8 o\'clock."',
+                correctAnswer: 'go',
+                explanation: '"Usually" indicates Present Simple. I go.'
+            },
+            {
+                id: 41,
+                type: 'text',
+                question: 'Complete with correct tense: "We _____ (listen) to the radio the day before yesterday."',
+                correctAnswer: 'listened',
+                explanation: '"The day before yesterday" indicates Simple Past. We listened.'
+            },
+            {
+                id: 42,
+                type: 'text',
+                question: 'Complete with correct tense: "My relatives _____ (give) me a lot of money last Christmas."',
+                correctAnswer: 'gave',
+                explanation: '"Last Christmas" indicates Simple Past. My relatives gave.'
+            },
+            {
+                id: 43,
+                type: 'text',
+                question: 'Complete with correct tense: "He _____ (play) football last Saturday."',
+                correctAnswer: 'played',
+                explanation: '"Last Saturday" indicates Simple Past. He played.'
+            },
+            {
+                id: 44,
+                type: 'text',
+                question: 'Complete with correct tense: "We _____ (go) to the zoo right now."',
+                correctAnswer: 'are going',
+                explanation: '"Right now" indicates Present Continuous. We are going.'
+            },
+            {
+                id: 45,
+                type: 'text',
+                question: 'Complete with correct tense: "Mira _____ (listen) to music once a day."',
+                correctAnswer: 'listens',
+                explanation: '"Once a day" indicates Present Simple. Mira listens.'
+            },
+
+            // --- Section 9 & 10: Adjectives (Images 9 & 10) ---
+            {
+                id: 46,
+                type: 'text',
+                question: 'Write the Comparative and Superlative of "big". (Format: comparative, superlative)',
+                correctAnswer: 'bigger, the biggest',
+                explanation: 'Big -> Bigger -> The Biggest'
+            },
+            {
+                id: 47,
+                type: 'text',
+                question: 'Write the Comparative and Superlative of "thin". (Format: comparative, superlative)',
+                correctAnswer: 'thinner, the thinnest',
+                explanation: 'Thin -> Thinner -> The Thinnest'
+            },
+            {
+                id: 48,
+                type: 'text',
+                question: 'Write the Comparative and Superlative of "happy". (Format: comparative, superlative)',
+                correctAnswer: 'happier, the happiest',
+                explanation: 'Happy -> Happier -> The Happiest'
+            },
+            {
+                id: 49,
+                type: 'text',
+                question: 'Write the Comparative and Superlative of "good". (Format: comparative, superlative)',
+                correctAnswer: 'better, the best',
+                explanation: 'Good -> Better -> The Best (Irregular)'
+            },
+            {
+                id: 50,
+                type: 'text',
+                question: 'Write the Comparative and Superlative of "bad". (Format: comparative, superlative)',
+                correctAnswer: 'worse, the worst',
+                explanation: 'Bad -> Worse -> The Worst (Irregular)'
+            },
+            {
+                id: 51,
+                type: 'text',
+                question: 'Write the Comparative and Superlative of "expensive". (Format: comparative, superlative)',
+                correctAnswer: 'more expensive, the most expensive',
+                explanation: 'Expensive -> More expensive -> The most expensive'
+            },
+            {
+                id: 52,
+                type: 'text',
+                question: 'Write the Comparative and Superlative of "difficult". (Format: comparative, superlative)',
+                correctAnswer: 'more difficult, the most difficult',
+                explanation: 'Difficult -> More difficult -> The most difficult'
+            },
+
+            // --- Section 11: Wh- Questions & Direct Speech (Image 11) ---
+            {
+                id: 53,
+                type: 'text',
+                question: 'Fill in the blank: "_____ is dad? He\'s at the park."',
+                correctAnswer: 'Where',
+                explanation: 'The answer is a place (park), so use "Where".'
+            },
+            {
+                id: 54,
+                type: 'text',
+                question: 'Fill in the blank: "_____ is she? She is my friend."',
+                correctAnswer: 'Who',
+                explanation: 'The answer is a person (friend), so use "Who".'
+            },
+            {
+                id: 55,
+                type: 'text',
+                question: 'Fill in the blank: "_____ are you feeling? I\'m excited."',
+                correctAnswer: 'How',
+                explanation: 'The answer is a feeling/state (excited), so use "How".'
+            },
+            {
+                id: 56,
+                type: 'text',
+                question: 'Fill in the blank: "_____ are you making a cake? It\'s mum\'s birthday."',
+                correctAnswer: 'Why',
+                explanation: 'The answer gives a reason (mum\'s birthday), so use "Why".'
+            },
+            {
+                id: 57,
+                type: 'text',
+                question: 'Fill in the blank: "_____ is your favorite animal? An elephant!"',
+                correctAnswer: 'What',
+                explanation: 'The answer is a thing (animal), so use "What".'
+            },
+            // Direct to Indirect Speech (Image 11)
+            {
+                id: 58,
+                type: 'text',
+                question: 'Change to Indirect Speech: Mom said, "Please close the door."',
+                correctAnswer: 'She said please close the door.',
+                explanation: 'Indirect speech: She said please close the door (or She asked to close the door).'
+            },
+            {
+                id: 59,
+                type: 'text',
+                question: 'Change to Indirect Speech: Ben asked, "Where is my backpack?"',
+                correctAnswer: 'He asked where is my backpack.',
+                explanation: 'Indirect speech: He asked where is my backpack.'
+            },
+            {
+                id: 60,
+                type: 'text',
+                question: 'Change to Indirect Speech: Lily shouted, "Look at the rainbow!"',
+                correctAnswer: 'She shouted look at the rainbow.',
+                explanation: 'Indirect speech: She shouted look at the rainbow.'
+            },
+
+            // --- Section 12 & 13: Predictions (Images 12 & 13) ---
+            {
+                id: 61,
+                type: 'mcq',
+                question: 'Picture: A family sitting at a table with pizza. What will happen next?',
+                options: ['The children will go out for a walk.', 'The family will eat the pizza.', 'The children will do their homework.'],
+                correctAnswer: 'The family will eat the pizza.',
+                explanation: 'The picture shows food, so eating is the logical next step.'
+            },
+            {
+                id: 62,
+                type: 'mcq',
+                question: 'Picture: A boy swinging a bat at a ball. What will happen next?',
+                options: ['The boy will kick the ball.', 'The boy will throw the ball.', 'The boy will hit the ball.'],
+                correctAnswer: 'The boy will hit the ball.',
+                explanation: 'He is holding a bat, so he will hit the ball.'
+            },
+            {
+                id: 63,
+                type: 'mcq',
+                question: 'Picture: A boy with a new toy. Christmas tree in background. What will happen next?',
+                options: ['The boy will play with his new toy.', 'The boy will decorate the Christmas tree.', 'The boy will find something else to play with.'],
+                correctAnswer: 'The boy will play with his new toy.',
+                explanation: 'The logical outcome is playing with the new toy.'
+            },
+            {
+                id: 64,
+                type: 'mcq',
+                question: 'Picture: Children playing in the water. What will happen next?',
+                options: ['The children will go home after playing.', 'The children will swim and play in the water.', 'The children will fly kites.'],
+                correctAnswer: 'The children will swim and play in the water.',
+                explanation: 'The picture shows them already in the water.'
+            },
+            {
+                id: 65,
+                type: 'mcq',
+                question: 'Picture: A girl with ice cream and a vendor. What will happen next?',
+                options: ['Linda will eat the ice cream she bought from the vendor.', 'The vendor will give Linda an apple.', 'Linda will not buy ice cream from the vendor.'],
+                correctAnswer: 'Linda will eat the ice cream she bought from the vendor.',
+                explanation: 'She has already bought the ice cream.'
+            },
+            // Predicting Outcomes - Picture Clues (Image 13)
+            {
+                id: 66,
+                type: 'mcq',
+                question: 'Picture: A cat looking at a full bowl. What will it do?',
+                options: ['The cat will run.', 'The cat will eat.', 'The cat will play.'],
+                correctAnswer: 'The cat will eat.',
+                explanation: 'The cat is next to a food bowl, so it will eat.'
+            },
+            {
+                id: 67,
+                type: 'mcq',
+                question: 'Picture: A person wearing a chef hat and holding a bowl/ingredients. What will they do?',
+                options: ['Jen will take a nap.', 'Jim will swim.', 'Jed will bake.'],
+                correctAnswer: 'Jed will bake.',
+                explanation: 'The chef hat and ingredients indicate baking.'
+            },
+            {
+                id: 68,
+                type: 'mcq',
+                question: 'Picture: A girl holding a microphone. What will she do?',
+                options: ['She will sing.', 'She will take a bath.', 'She will sleep.'],
+                correctAnswer: 'She will sing.',
+                explanation: 'Holding a microphone suggests singing.'
+            },
+            {
+                id: 69,
+                type: 'mcq',
+                question: 'Picture: A boy with a balloon and a gift box, wearing a party hat. What will he do?',
+                options: ['He will go to the party.', 'She will go to the beach.', 'He will go to the hospital.'],
+                correctAnswer: 'He will go to the party.',
+                explanation: 'The party hat and gift indicate he is going to a party.'
+            },
+
+            // --- Section 14: Time Expressions Categorization (Image 14) ---
+            {
+                id: 70,
+                type: 'text',
+                question: 'Categorize "Yesterday" into Simple Present, Present Continuous, or Simple Past.',
+                correctAnswer: 'Simple Past Tense',
+                explanation: '"Yesterday" refers to the past.'
+            },
+            {
+                id: 71,
+                type: 'text',
+                question: 'Categorize "Now" into Simple Present, Present Continuous, or Simple Past.',
+                correctAnswer: 'Present Continuous Tense',
+                explanation: '"Now" refers to the present moment.'
+            },
+            {
+                id: 72,
+                type: 'text',
+                question: 'Categorize "Usually" into Simple Present, Present Continuous, or Simple Past.',
+                correctAnswer: 'Simple Present Tense',
+                explanation: '"Usually" indicates a habit or routine.'
+            },
+
+            // --- Section 15: What's Next? (Image 15) ---
+            {
+                id: 73,
+                type: 'text',
+                question: 'Picture: A boy playing a drum. Write your prediction starting with "I predict that..."',
+                correctAnswer: 'I predict that he will play music.',
+                explanation: 'He is holding drumsticks, so he will play music.'
+            },
+            {
+                id: 74,
+                type: 'text',
+                question: 'Picture: An elephant by a tree. Write your prediction starting with "I predict that..."',
+                correctAnswer: 'I predict that the elephant will eat leaves.',
+                explanation: 'Elephants eat leaves from trees.'
+            },
+            {
+                id: 75,
+                type: 'text',
+                question: 'Picture: A person climbing a ladder. Write your prediction starting with "I predict that..."',
+                correctAnswer: 'I predict that he will climb down.',
+                explanation: 'After climbing up, the next step is usually to climb down or reach the top.'
+            },
+            {
+                id: 76,
+                type: 'text',
+                question: 'Picture: A bear looking at a beehive. Write your prediction starting with "I predict that..."',
+                correctAnswer: 'I predict that the bear will eat honey.',
+                explanation: 'Bears love honey from beehives.'
+            },
+            {
+                id: 77,
+                type: 'text',
+                question: 'Picture: A rabbit going into a bush. Write your prediction starting with "I predict that..."',
+                correctAnswer: 'I predict that the rabbit will hide.',
+                explanation: 'Rabbits hide in bushes.'
+            },
+
+            // --- Section 16: Predicting Outcomes Scenarios (Image 16) ---
+            {
+                id: 78,
+                type: 'text',
+                question: 'Scenario: You leave the window open during a rainstorm. What is most likely to happen?',
+                correctAnswer: 'The room will get wet.',
+                explanation: 'Rain will come through the open window and make the room wet.'
+            },
+            {
+                id: 79,
+                type: 'text',
+                question: 'Scenario: You eat vegetables with every meal. What is most likely to happen?',
+                correctAnswer: 'You will be healthy.',
+                explanation: 'Eating vegetables contributes to good health.'
+            },
+            {
+                id: 80,
+                type: 'text',
+                question: 'Scenario: You lift something very heavy without asking for help. What is most likely to happen?',
+                correctAnswer: 'You will hurt your back.',
+                explanation: 'Lifting heavy objects incorrectly can cause injury.'
+            },
+            {
+                id: 81,
+                type: 'text',
+                question: 'Scenario: You water the grass every day even when it has been raining. What is most likely to happen?',
+                correctAnswer: 'The grass will die.',
+                explanation: 'Overwatering can drown plant roots and kill the grass.'
+            },
+            {
+                id: 82,
+                type: 'text',
+                question: 'Scenario: You check your phone instead of doing your homework. What is most likely to happen?',
+                correctAnswer: 'You will not finish your homework.',
+                explanation: 'Distraction leads to incomplete work.'
+            }
+        ];
+
+        // ==========================================
+        // LOGIC: Render, Check, and Display Results
+        // ==========================================
+
+        const quizContainer = document.getElementById('quiz-container');
+        const quizForm = document.getElementById('quiz-form');
+        const resultsSection = document.getElementById('results-section');
+        const scoreDisplay = document.getElementById('score-display');
+        const scorePercentage = document.getElementById('score-percentage');
+        const detailedResults = document.getElementById('detailed-results');
+
+        // 1. Render Questions to the UI
+        function renderQuiz() {
+            quizData.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.id = `question-${q.id}`;
+
+                let questionHTML = `
+                    <div class="question-title">
+                        <span class="question-number">${index + 1}</span>
+                        <span>${q.question}</span>
+                    </div>
+                `;
+
+                if (q.type === 'mcq') {
+                    questionHTML += `<div class="options">`;
+                    q.options.forEach(opt => {
+                        questionHTML += `
+                            <label>
+                                <input type="radio" name="q${q.id}" value="${opt}">
+                                ${opt}
+                            </label>
+                        `;
+                    });
+                    questionHTML += `</div>`;
+                } else if (q.type === 'text') {
+                    questionHTML += `
+                        <div class="options">
+                            <input type="text" name="q${q.id}" placeholder="Type your answer here..." autocomplete="off">
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = questionHTML;
+                quizContainer.appendChild(card);
+            });
+        }
+
+        // 2. Handle Form Submission and Auto-Check
+        quizForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let score = 0;
+            let total = quizData.length;
+            let resultHTML = '';
+
+            quizData.forEach((q, index) => {
+                let userAnswer = '';
+                
+                if (q.type === 'mcq') {
+                    const selectedOption = document.querySelector(`input[name="q${q.id}"]:checked`);
+                    if (selectedOption) {
+                        userAnswer = selectedOption.value;
+                    }
+                } else if (q.type === 'text') {
+                    const textInput = document.querySelector(`input[name="q${q.id}"]`);
+                    if (textInput) {
+                        userAnswer = textInput.value.trim();
+                    }
+                }
+
+                // Check Answer (Case-insensitive for text inputs)
+                let isCorrect = false;
+                let correctAnswerDisplay = q.correctAnswer;
+
+                if (q.type === 'mcq') {
+                    isCorrect = (userAnswer === q.correctAnswer);
+                } else if (q.type === 'text') {
+                    // Flexible checking for text answers (lowercase, remove extra spaces)
+                    const cleanUser = userAnswer.toLowerCase().replace(/[.,!?]/g, '');
+                    const cleanCorrect = q.correctAnswer.toLowerCase().replace(/[.,!?]/g, '');
+                    // Check if user answer contains the key phrase or is exact
+                    isCorrect = cleanUser.includes(cleanCorrect) || cleanCorrect.includes(cleanUser);
+                }
+
+                if (isCorrect) {
+                    score++;
+                }
+
+                // Build Result Display
+                const resultClass = isCorrect ? 'correct' : 'wrong';
+                const icon = isCorrect ? '✅' : '❌';
+                
+                let userAnswerDisplay = userAnswer || '<em>(No answer provided)</em>';
+                if (!isCorrect && q.type === 'text' && userAnswer) {
+                    userAnswerDisplay = `<span class="user-answer">${userAnswer}</span>`;
+                }
+
+                resultHTML += `
+                    <div class="result-item ${resultClass}">
+                        <div class="result-question">${icon} Q${index + 1}: ${q.question}</div>
+                        <div class="result-answer">Your answer: ${userAnswerDisplay}</div>
+                        ${!isCorrect ? `<div class="result-answer correct-answer">Correct answer: ${correctAnswerDisplay}</div>` : ''}
+                        <div class="explanation">💡 ${q.explanation}</div>
+                    </div>
+                `;
+            });
+
+            // Calculate Percentage
+            const percentage = Math.round((score / total) * 100);
+
+            // Update UI
+            scoreDisplay.textContent = `${score} / ${total}`;
+            scorePercentage.textContent = `Score: ${percentage}%`;
+            detailedResults.innerHTML = resultHTML;
+
+            // Hide Quiz, Show Results
+            quizForm.style.display = 'none';
+            resultsSection.style.display = 'block';
+
+            // Scroll to top of results
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Initialize the quiz on page load
+        window.onload = renderQuiz;
+
+    </script>
+</body>
+</html>
